@@ -1,0 +1,13 @@
+<div class="row-fluid">
+	<div class="span12">
+		<table id="board" class="table table-bordered">
+			<tr class="row-fluid"  ng-repeat="row in game.tiles.list">
+				<td class="{{cell.status}} {{cell.style}}" ng-repeat="cell in row">
+					<div>
+						{{game.tile.display(cell)}}
+					</div>
+				</td><!--/span-->
+			</tr><!--/row-->
+		</table>
+	</div><!--/span-->
+</div><!--/row-->

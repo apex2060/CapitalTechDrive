@@ -1,0 +1,39 @@
+<div class="row-fluid">
+	<div class="span3">
+		<div class="well sidebar-nav">
+			<ul class="nav nav-list">
+				<li class="nav-header">Sidebar</li>
+				<li><a href="">Game Information</a></li>
+				<li><a href="" ng-click="game.corp.showList();">Corps</a></li>
+				<li><a href="" ng-click="game.ai.play();">Suggestions</a></li>
+				<li><a href="" ng-click="game.player.showList();">Players</a></li>
+				<li><a href="" ng-click="game.stats.playerStock();">Player Stats</a></li>
+
+			</ul>
+		</div><!--/.well -->
+	</div><!--/span-->
+	<div class="span9">
+		<div class="details row-fluid">
+			<div class="span4">
+				<h2>Players</h2>
+				<ul ng-repeat="player in game.player.list">
+					<li>{{player.name}}</li>
+				</ul>
+				<p><a class="btn" href="#">Invite Someone &raquo;</a></p>
+			</div><!--/span-->
+			<div class="span4">
+				<h2>Stats</h2>
+				<ul>
+					<li>Tiles Placed: {{game.tile.place_ct}}</li>
+					<li>Tiles Left: {{game.tile.ct-game.tile.place_ct}}</li>
+					<li>Money Spent: {{game.stats.money_spent | currency}}</li>
+				</ul>
+			</div><!--/span-->
+			<div class="span4">
+				<h2>Last Tile Placed</h2>
+				<p>{{game.tile.display(game.last.tile)}}</p>
+				<p><a class="btn" href="#">Placement History &raquo;</a></p>
+			</div><!--/span-->
+		</div><!--/row-->
+	</div><!--/span-->
+</div><!--/row-->

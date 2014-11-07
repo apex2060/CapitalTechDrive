@@ -1,0 +1,46 @@
+<div class="row-fluid">
+	<div class="span3">
+		<div class="well sidebar-nav">
+			<ul class="nav nav-list">
+				<li class="nav-header">{{game.player.list[game.player.me.index].name}}</li>
+				<li><button type="button" class="btn btn-primary" ng-click="game.settings.setNotification();">Audio: {{game.defaults.notifications[game.settings.notification].name}}</button></li>
+				<li><a href="" ng-click="game.corp.showList();">Corporations</a></li>
+				<li><a href="" ng-click="game.player.showList();">Players</a></li>
+			</ul>
+		</div><!--/.well -->
+	</div><!--/span-->
+	<div class="span9">
+		<div class="details row-fluid">
+			<div class="span3">
+				<h3>Your Money</h3>
+				<p>{{game.player.list[game.player.me.index].money | currency}}</p>
+			</div><!--/span-->
+			<!-- <div class="span8">
+				<h2>Your Stocks</h2>
+				<ul ng-repeat="stock in game.player.list[game.player.me.index].stock">
+					<li>{{stock.name}}</li>
+				</ul>
+			</div> --><!--/span-->
+			<div class="span9">
+				<div class="cards">
+					<div class="card" ng-repeat="stock in game.player.getStock(game.player.me.index)">
+						<h1 class="{{game.corp.list[stock.corp].symbol}}">{{stock.name}}</h1>
+						<span class="badge">{{stock.list.length}}</span>
+						<p>Purchase History</p>
+						<ul>
+							<li ng-repeat="history in stock.list">{{history.price | currency}}</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- <div class="span4">
+				<h2>Your Tiles</h2>
+				<div class="span4" ng-repeat="tile in game.player.list[game.player.me.index].tiles">
+					<div class="thumbnail ptr" ng-click="game.tile.place(tile)">
+						{{game.tile.display(tile)}}
+					</div>
+				</div>
+			</div> -->
+		</div><!--/row-->
+	</div><!--/span-->
+</div><!--/row-->

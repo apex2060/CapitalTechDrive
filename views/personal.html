@@ -1,0 +1,260 @@
+<div ng-include src="'views/personal_details.html'"></div>
+
+<div class="navbar" ng-init="game.init()">
+	<div class="navbar-inner">
+		<a class="brand" href="#">{{game.player.list[game.details.current].name}}</a>
+		<ul class="nav">
+			<li class="{{game.turn.progress[0]}}"><a href="">Place Tile</a></li>
+			<li class="{{game.turn.progress[1]}}">
+				<a href="" ng-click="game.corp.stock.buyList()">
+					Purchase Stock
+				</a>
+			</li>
+			<li class="{{game.turn.progress[2]}}">
+				<a href="" ng-click="game.turn.next()">
+					End Turn
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div class="row-fluid">
+	<div class="span9">
+		<table id="board" class="table table-bordered {{game.player.isMe(game.details.current)}}">
+			<tr class="row-fluid"  ng-repeat="row in game.tile.list">
+				<td class="{{cell.status}} {{cell.style}} {{game.player.myPiece(cell)}}" ng-repeat="cell in row" ng-click="game.tile.place(cell)">
+					<div>
+						{{game.tile.display(cell)}}
+					</div>
+				</td><!--/span-->
+			</tr><!--/row-->
+		</table>
+	</div><!--/span-->
+	<div class="span3 cwhite">
+		<table class="table table-condensed">
+			<tr>
+				<td><a href="" ng-click="game.corp.showList();">Name</a></td>
+				<td><a href="" ng-click="game.corp.showList();">Stocks</a></td>
+				<td><a href="" ng-click="game.corp.showList();">Cost</a></td>
+			</tr>
+			<tr ng-repeat="corp in game.corp.list" class="{{corp.symbol}}" ng-click="game.corp.func($index)">
+				<td>{{corp.tiles.length}} {{corp.symbol}}</td>
+				<td>{{corp.stock}}</td>
+				<td>{{game.corp.prices($index).cost | currency}}</td>
+			</tr>
+		</table>
+		<div class="well">Cost Chart</div>
+		<div class="well">
+			<ul>
+				<li ng-repeat="details in game.ai.details">{{details}}</li>
+			</ul>
+		</div>
+	</div>
+</div><!--/row-->
+
+<div class="well" ng-bind-html-unsafe="game.ai.reasons"></div>
+<!-- <div class="well">{{game}}</div> -->
+<div ng-include src="'views/game_details.html'"></div>
+<a href="" id="authorizeButton">Authorize</a>
+
+
+
+
+
+
+<!-- BEGIN MODALS -->
+
+
+<div id="corps" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">corps</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table table-condensed">
+			<tr>
+				<td># Stocks</td>
+				<td>Name</td>
+				<td>Co. Size</td>
+				<td>Stock Cost</td>
+			</tr>
+			<tr ng-repeat="corp in game.corp.list" class="{{corp.symbol}}" ng-click="game.corp.func($index)">
+				<td>{{corp.stock}}</td>
+				<td>{{corp.symbol}}</td>
+				<td>{{corp.tiles.length}}</td>
+				<td>{{game.corp.prices($index).cost | currency}}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#corps').modal('hide')">Close</button>
+	</div>
+</div>
+<div id="corpsPlace" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<h3 id="myModalLabel">Click on one to place it on the board.</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table table-condensed">
+			<tr>
+				<td># Stocks</td>
+				<td>Name</td>
+				<td>Co. Size</td>
+				<td>Stock Cost</td>
+			</tr>
+			<tr ng-repeat="corp in game.corp.list" class="{{corp.symbol}}" ng-click="game.corp.func($index)" ng-show="corp.tiles.length==0">
+				<td>{{corp.stock}}</td>
+				<td>{{corp.symbol}}</td>
+				<td>{{corp.tiles.length}}</td>
+				<td>{{game.corp.prices($index).cost | currency}}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+<div id="merger" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<h3 id="myModalLabel">A Merger has occurred!</h3>
+	</div>
+	<div class="modal-body">
+		<p>Select the company you want to keep on the board.  
+			<br>The largest company (with the most tiles) must stay.  
+			<br>If there are multiple largest companies, you choose which one stays.</p>
+		<table class="table table-condensed">
+			<tr ng-repeat="icorp in game.corp.merger.list" class="{{icorp.symbol}}" ng-click="game.corp.func(icorp)">
+				<td>{{game.corp.list[icorp].name}}</td>
+				<td>{{game.corp.prices(icorp).cost | currency}}</td>
+				<td>{{game.corp.list[icorp].tiles.length}}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id="mergeSell" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">{{game.corp.list[game.corp.merger.data.rcorp].name}}</h3>
+	</div>
+	<div class="modal-body">
+		<h4>There are {{game.corp.list[game.corp.merger.data.mcorp].stock}} {{game.corp.list[game.corp.merger.data.mcorp].name}} available.</h4>
+		<table class="table table-condensed">
+			<tr>
+				<td>Name</td>
+				<td>Stocks Owned</td>
+				<td>Sell {{game.corp.prices(game.corp.merger.data.rcorp, game.corp.merger.data.tile_ct).cost | currency}}</td>
+				<td>Trade 2/1</td>
+			</tr>
+			<tr ng-repeat="player in game.player.list">
+				<td>{{player.name}}</td>
+				<td>{{player.stock[game.corp.merger.data.rcorp].list.length}}</td>
+				<td><button class="btn btn-mini btn-success" type="button" ng-click="game.corp.merger.sell($index)" ng-disabled="$index!=game.corp.merger.turn">Sell</button></td>
+				<td><button class="btn btn-mini btn-warning" type="button" ng-click="game.corp.merger.trade($index)" ng-disabled="$index!=game.corp.merger.turn">Trade</button></td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" ng-click="game.corp.merger.func();">Close</button>
+	</div>
+</div>
+
+
+<div id="stocks" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Player Stocks</h3>
+	</div>
+	<div class="modal-body">
+		<div bar-chart="game.stats.stock" chart-title="Player Stocks" chart-colors="{{game.stats.hColors()}}" chart-haxis-title="Players"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#stocks').modal('hide')">Close</button>
+	</div>
+</div>
+
+
+<div id="players" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Players</h3>
+	</div>
+	<div class="modal-body">
+		<h4>There are {{game.player.list.length}} players.</h4>
+		<table class="table table-condensed">
+			<tr>
+				<td>Name</td>
+				<td>Color</td>
+				<td>Auto</td>
+				<td>Manage</td>
+			</tr>
+			<tr ng-repeat="player in game.player.list" class="{{game.player.isMe($index)}}">
+				<td><input type="text" class="span2" ng-model="player.name" ng-change="game.player.update($index)"></td>
+				<td><input type="color" class="span2" ng-model="player.color" ng-change="game.player.update($index)" style="background:{{player.color}};"></td>
+				<td>
+					<button class="btn btn-mini btn-success" type="button" ng-show="!player.auto" ng-click="game.player.auto($index)">Human</button>
+					<button class="btn btn-mini btn-primary" type="button" ng-show="player.auto" ng-click="game.player.auto($index)">Computer</button>
+				</td>
+				<td>
+					<button class="btn btn-mini btn-danger" type="button" ng-show="!player.update" ng-click="game.player.remove($index)">Delete</button>
+					<button class="btn btn-mini btn-primary" type="button" ng-show="player.update" ng-click="game.player.update($index,true)">Save</button>
+				</td>
+			</tr>
+		</table>
+		<form name="new_player" ng-submit="game.player.add()">
+			<input type="text" name="player_name" id="player_name" placeholder="player name">
+			<input type="text" name="player_color" id="player_color" placeholder="player color: #009">
+			<button class="btn btn-mini btn-warning" type="submit">Add</button>
+		</form>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#players').modal('hide');">Close</button>
+		<button class="btn btn-inverse" ng-click="game.begin()">Start Game</button>
+	</div>
+</div>
+
+<div id="gameStats" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Final Stats</h3>
+	</div>
+	<div class="modal-body">
+		<table class="table table-condensed">
+			<tr>
+				<td>Name</td>
+				<td>Money</td>
+			</tr>
+			<tr ng-repeat="player in game.player.list | orderBy:player.money">
+				<td>{{player.name}}</td>
+				<td>{{player.money | currency}}</td>
+			</tr>
+		</table>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#gameStats').modal('hide');">Close</button>
+		<button class="btn btn-inverse" ng-click="game.init()">Start New</button>
+	</div>
+</div>
+<!-- <div id="stockOwnership" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Player Stats</h3>
+	</div>
+	<div class="modal-body">
+		<div column-chart="game.stats.player()" chart-title="Player Stats" chart-haxis-title="Players"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#stockOwnership').modal('hide')">Close</button>
+	</div>
+</div> -->
+
+<div id="timeline" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		<h3 id="myModalLabel">Timeline</h3>
+	</div>
+	<div class="modal-body">
+		<div id="timeline_cont"></div>
+	</div>
+	<div class="modal-footer">
+		<button class="btn" onClick="$('#timeline').modal('hide')">Close</button>
+	</div>
+</div>
