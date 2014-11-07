@@ -36,6 +36,3 @@ handlers:
 - url: /favicon.ico
   static_files: favicon.ico
   upload: favicon\.ico
-
-# - url: /api/.*
-#   script: api/main.php
