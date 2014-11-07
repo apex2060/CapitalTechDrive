@@ -1,0 +1,41 @@
+application: capital-tech-drive
+version: 1
+runtime: php
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /(.*\.html)
+  static_files: \1
+  upload: .*\.html
+
+
+- url: /audio
+  static_dir: audio
+
+- url: /css
+  static_dir: css
+
+- url: /files
+  static_dir: files
+
+- url: /js
+  static_dir: js
+
+- url: /views
+  static_dir: views
+
+- url: /
+  static_files: index.html
+  upload: index\.html
+
+- url: /
+  static_files: board.html
+  upload: board\.html
+
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+# - url: /api/.*
+#   script: api/main.php
