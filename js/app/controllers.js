@@ -22,7 +22,7 @@ var MainCtrl = app.controller('MainCtrl', function($scope) {
 
 	game.defaults.google 				= {};
 		game.defaults.google.key 		= 'AIzaSyCEugXvbob9DFkm5CE7goqYD9uavz07IQM';
-		game.defaults.google.clientId 	= '96880613868-ddjmp7d384tfvrihff8ag69mgav2oj8g.apps.googleusercontent.com';
+		game.defaults.google.clientId 	= '96880613868-4bn6gpf5oj353e1rs65agk5k5da2li98.apps.googleusercontent.com';
 	game.defaults.abc					= Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Aa','Bb','Cc','Dd','Ee','Ff','Gg','Hh','Ii','Jj','Kk','Ll');
 	game.defaults.notifications = [{"name":"None", "audio":""},{"name":"soft", "audio":new Audio("audio/switch.mp3")},{"name":"loud", "audio":new Audio("audio/done.mp3")}];
 	game.defaults.start_money 			= 6000;
@@ -1855,7 +1855,7 @@ var BoardCtrl = app.controller('BoardCtrl', function($scope) {
 	game.defaults 						= {}
 		game.defaults.google 			= {};
 		game.defaults.google.key 		= 'AIzaSyCEugXvbob9DFkm5CE7goqYD9uavz07IQM';
-		game.defaults.google.clientId 	= '96880613868-ddjmp7d384tfvrihff8ag69mgav2oj8g.apps.googleusercontent.com';
+		game.defaults.google.clientId 	= '96880613868-4bn6gpf5oj353e1rs65agk5k5da2li98.apps.googleusercontent.com';
 		game.defaults.abc				= Array('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Aa','Bb','Cc','Dd','Ee','Ff','Gg','Hh','Ii','Jj','Kk','Ll');
 
 	game.prices = function(pos, type){
